@@ -5,13 +5,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 public class Robot {
 
     private DcMotor lfDrive, lbDrive, rfDrive, rbDrive, intake, catapult, maw;
 //    private Servo extendServo, intakeServo, hopperServo;
     private DigitalChannel sensor;
+    private CRServo finger;
 
     OpMode opMode;
 
@@ -41,6 +42,7 @@ public class Robot {
         this.catapult  = ahwMap.get(DcMotor.class, "catapult");
         this.maw = ahwMap.get(DcMotor.class, "maw");
         this.sensor = ahwMap.get(DigitalChannel.class, "sensor");
+        this.finger = ahwMap.get(CRServo.class, "finger");
         intake.setDirection(DcMotor.Direction.REVERSE);
         catapult.setDirection(DcMotor.Direction.REVERSE);
         maw.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -107,6 +109,7 @@ public class Robot {
     public void setMawPower(double power) {
         this.maw.setPower(power);
     }
+    public void rotateFinger(double power) {this.finger.setPower(power);}
 
     public boolean sensorState() {
         return !sensor.getState();

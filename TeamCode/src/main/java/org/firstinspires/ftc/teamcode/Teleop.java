@@ -10,7 +10,13 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name = "Ri30HTeleop", group = "Iterative Opmode")
 //@Disabled
 public class Teleop extends OpMode {
-
+    public enum States {
+        START,
+        DOWN,
+        LAUNCH,
+        MANUAL
+    }
+    States states = States.START;
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private Robot robot = new Robot();
@@ -55,18 +61,28 @@ public class Teleop extends OpMode {
         } else {
             robot.setIntakePower(0);
         }
+        if (gamepad1.x) {
+            robot.rotateFinger(1);
+        }
+        else if (gamepad1.y) {
+            robot.rotateFinger(-1);
+        }
+        else {
+            robot.rotateFinger(0);
+        }
+
 
         // Catapult
-        if (gamepad1.right_bumper) { // launch
+      /*  if (gamepad1.right_bumper) { // launch
             robot.setCatapultPower(1);
-            if (!sensor.getState()) {
-                robot.setCatapultPower(0);
-            }
+
         } else if (gamepad1.right_trigger > 0.2) { // backdrive
             robot.setCatapultPower(-gamepad1.left_trigger);
         } else {
             robot.setCatapultPower(0);
         }
+
+       */
 
         // the MAW
         if (gamepad1.dpad_up || gamepad2.dpad_up) {
@@ -77,6 +93,55 @@ public class Teleop extends OpMode {
             robot.setMawPower(0);
         }
 
+        switch (states) {
+            case START:
+                robot.setCatapultPower(0);
+                if (gamepad1.right_bumper && sensor.getState()) {
+                    states = States.DOWN;
+                }
+                else if (gamepad1.right_trigger > 0.2) { // backdrive
+                robot.setCatapultPower(-gamepad1.left_trigger);
+            } else {
+                robot.setCatapultPower(0);
+            }
+
+                if (gamepad1.a || gamepad1.b) {
+                    states = States.MANUAL;
+                }
+                break;
+
+            case DOWN:
+                robot.setCatapultPower(1);
+                if (!sensor.getState()) {
+                    states = States.LAUNCH;
+                    robot.setCatapultPower(0);
+                }
+                break;
+            case LAUNCH:
+                if (gamepad1.right_bumper && !sensor.getState()) {
+                    robot.setCatapultPower(1);
+                    states = States.DOWN;
+                }
+                break;
+            case MANUAL:
+                if (gamepad1.a) {
+                    robot.setCatapultPower(1);
+                } else if (gamepad1.b) {
+                    robot.setCatapultPower(-1);
+                }
+                else {
+                    robot.setCatapultPower(0);
+                }
+                break;
+            default:
+                states = States.START;
+
+        }
+        if (gamepad1.left_bumper && states != States.START) {
+            states = States.START;
+        }
+        telemetry.addData("States", states);
+        telemetry.update();
 
 
 
