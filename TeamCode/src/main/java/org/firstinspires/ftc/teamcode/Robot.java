@@ -9,15 +9,15 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 public class Robot {
 
-    private DcMotor lfDrive, lbDrive, rfDrive, rbDrive, intake, catapult, maw;
+    private DcMotor lfDrive, lbDrive, rfDrive, rbDrive, intake; //, catapult, maw;
 //    private Servo extendServo, intakeServo, hopperServo;
-    private DigitalChannel sensor;
-    private CRServo finger;
+//    private DigitalChannel sensor;
+//    private CRServo finger;
 
     OpMode opMode;
 
-    private static final double WIDTH = 13.75;
-    private static final double LENGTH = 12.25;
+    private static final double WIDTH = 15.00;
+    private static final double LENGTH = 13.7;
     private static final double MAX_SPEED = 1.0;
 
     public void init(HardwareMap ahwMap, OpMode op) {
@@ -39,14 +39,14 @@ public class Robot {
         rbDrive.setDirection(DcMotor.Direction.FORWARD);
 
         this.intake = ahwMap.get(DcMotor.class, "intake");
-        this.catapult  = ahwMap.get(DcMotor.class, "catapult");
-        this.maw = ahwMap.get(DcMotor.class, "maw");
-        this.sensor = ahwMap.get(DigitalChannel.class, "sensor");
-        this.finger = ahwMap.get(CRServo.class, "finger");
+//        this.catapult  = ahwMap.get(DcMotor.class, "catapult");
+//        this.maw = ahwMap.get(DcMotor.class, "maw");
+//        this.sensor = ahwMap.get(DigitalChannel.class, "sensor");
+//        this.finger = ahwMap.get(CRServo.class, "finger");
         intake.setDirection(DcMotor.Direction.REVERSE);
-        catapult.setDirection(DcMotor.Direction.REVERSE);
-        maw.setDirection(DcMotorSimple.Direction.FORWARD);
-        sensor.setMode(DigitalChannel.Mode.INPUT);
+//        catapult.setDirection(DcMotor.Direction.REVERSE);
+//        maw.setDirection(DcMotorSimple.Direction.FORWARD);
+//        sensor.setMode(DigitalChannel.Mode.INPUT);
 
 
         stop();
@@ -102,18 +102,18 @@ public class Robot {
         this.intake.setPower(power);
     }
 
-    public void setCatapultPower(double power) {
-        this.catapult.setPower(power);
-    }
+//    public void setCatapultPower(double power) {
+//        this.catapult.setPower(power);
+//    }
 
-    public void setMawPower(double power) {
-        this.maw.setPower(power);
-    }
-    public void rotateFinger(double power) {this.finger.setPower(power);}
+//    public void setMawPower(double power) {
+//        this.maw.setPower(power);
+//    }
+//    public void rotateFinger(double power) {this.finger.setPower(power);}
 
-    public boolean sensorState() {
-        return !sensor.getState();
-    }
+//    public boolean sensorState() {
+//        return !sensor.getState();
+//    }
     public void stop(){
         lfDrive.setPower(0);
         lbDrive.setPower(0);
