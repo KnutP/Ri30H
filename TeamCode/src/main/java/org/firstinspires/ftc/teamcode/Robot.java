@@ -2,18 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Robot {
 
-    private DcMotor lfDrive, lbDrive, rfDrive, rbDrive, intake; //, catapult, maw;
-//    private Servo extendServo, intakeServo, hopperServo;
-//    private DigitalChannel sensor;
-//    private CRServo finger;
-
+    private DcMotor lfDrive, lbDrive, rfDrive, rbDrive, intake, pollenShooter, nectarShooter;
+    private Servo pollenServo, nectarServo;
     OpMode opMode;
 
     private static final double WIDTH = 15.00;
@@ -24,30 +19,27 @@ public class Robot {
         // Save reference to Hardware map
         this.opMode = op;
 
-//        this.extendServo = ahwMap.get(Servo.class, "extendServo");
-//        this.intakeServo = ahwMap.get(Servo.class, "intakeServo");
-//        this.hopperServo = ahwMap.get(Servo.class, "hopperServo");
+        this.pollenServo = ahwMap.get(Servo.class, "pollenServo");
+        this.nectarServo = ahwMap.get(Servo.class, "nectarServo");
 
         // Define and Initialize Motors
         this.lfDrive  = ahwMap.get(DcMotor.class, "lfDrive");
         this.lbDrive  = ahwMap.get(DcMotor.class, "lbDrive");
         this.rfDrive  = ahwMap.get(DcMotor.class, "rfDrive");
         this.rbDrive  = ahwMap.get(DcMotor.class, "rbDrive");
-        lfDrive.setDirection(DcMotor.Direction.REVERSE);
-        lbDrive.setDirection(DcMotor.Direction.REVERSE);
-        rfDrive.setDirection(DcMotor.Direction.FORWARD);
-        rbDrive.setDirection(DcMotor.Direction.FORWARD);
+        rfDrive.setDirection(DcMotor.Direction.REVERSE);
+        rbDrive.setDirection(DcMotor.Direction.REVERSE);
+        lfDrive.setDirection(DcMotor.Direction.FORWARD);
+        lbDrive.setDirection(DcMotor.Direction.FORWARD);
 
         this.intake = ahwMap.get(DcMotor.class, "intake");
-//        this.catapult  = ahwMap.get(DcMotor.class, "catapult");
-//        this.maw = ahwMap.get(DcMotor.class, "maw");
-//        this.sensor = ahwMap.get(DigitalChannel.class, "sensor");
-//        this.finger = ahwMap.get(CRServo.class, "finger");
         intake.setDirection(DcMotor.Direction.REVERSE);
-//        catapult.setDirection(DcMotor.Direction.REVERSE);
-//        maw.setDirection(DcMotorSimple.Direction.FORWARD);
-//        sensor.setMode(DigitalChannel.Mode.INPUT);
 
+        this.nectarShooter = ahwMap.get(DcMotor.class, "nectarShooter");
+        this.pollenShooter = ahwMap.get(DcMotor.class, "pollenShooter");
+
+        nectarShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pollenShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         stop();
 
@@ -102,18 +94,22 @@ public class Robot {
         this.intake.setPower(power);
     }
 
-//    public void setCatapultPower(double power) {
-//        this.catapult.setPower(power);
-//    }
+    public void setPollenShooterPower(double power) {
+        this.pollenShooter.setPower(power);
+    }
 
-//    public void setMawPower(double power) {
-//        this.maw.setPower(power);
-//    }
-//    public void rotateFinger(double power) {this.finger.setPower(power);}
+    public void setNectarShooterPower(double power) {
+        this.nectarShooter.setPower(power);
+    }
 
-//    public boolean sensorState() {
-//        return !sensor.getState();
-//    }
+    public void setNectarServoPosition(double position) {
+        this.nectarServo.setPosition(position);
+    }
+
+    public void setPollenServoPosition(double position) {
+        this.pollenServo.setPosition(position);
+    }
+
     public void stop(){
         lfDrive.setPower(0);
         lbDrive.setPower(0);

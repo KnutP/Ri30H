@@ -10,13 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name = "Ri30HTeleop", group = "Iterative Opmode")
 //@Disabled
 public class Teleop extends OpMode {
-    public enum States {
-        START,
-        DOWN,
-        LAUNCH,
-        MANUAL
-    }
-    States states = States.START;
+
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private Robot robot = new Robot();
@@ -29,8 +23,6 @@ public class Teleop extends OpMode {
     @Override
     public void init() {
         robot.init(hardwareMap, this);
-//        sensor = hardwareMap.get(DigitalChannel.class, "sensor");
-//        sensor.setMode(DigitalChannel.Mode.INPUT);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -61,89 +53,27 @@ public class Teleop extends OpMode {
         } else {
             robot.setIntakePower(0);
         }
-//        if (gamepad1.x) {
-//            robot.rotateFinger(1);
-//        }
-//        else if (gamepad1.y) {
-//            robot.rotateFinger(-1);
-//        }
-//        else {
-//            robot.rotateFinger(0);
-//        }
 
-
-        // Catapult
-      /*  if (gamepad1.right_bumper) { // launch
-            robot.setCatapultPower(1);
-
-        } else if (gamepad1.right_trigger > 0.2) { // backdrive
-            robot.setCatapultPower(-gamepad1.left_trigger);
-        } else {
-            robot.setCatapultPower(0);
+        if (gamepad1.y) {
+            robot.setPollenShooterPower(-0.7);
+            robot.setNectarShooterPower(0.9);
+        }
+        else {
+            robot.setPollenShooterPower(0);
+            robot.setNectarShooterPower(0);
         }
 
-       */
-
-        // the MAW
-//        if (gamepad1.dpad_up || gamepad2.dpad_up) {
-//            robot.setMawPower(-1);
-//        } else if (gamepad1.dpad_down || gamepad2.dpad_down) {
-//            robot.setMawPower(0.5);
-//        } else {
-//            robot.setMawPower(0);
-//        }
-//
-//        switch (states) {
-//            case START:
-//                robot.setCatapultPower(0);
-//                if (gamepad1.right_bumper && sensor.getState()) {
-//                    states = States.DOWN;
-//                }
-//                else if (gamepad1.right_trigger > 0.2) { // backdrive
-//                robot.setCatapultPower(-gamepad1.left_trigger);
-//            } else {
-//                robot.setCatapultPower(0);
-//            }
-//
-//                if (gamepad1.a || gamepad1.b) {
-//                    states = States.MANUAL;
-//                }
-//                break;
-//
-//            case DOWN:
-//                robot.setCatapultPower(1);
-//                if (!sensor.getState()) {
-//                    states = States.LAUNCH;
-//                    robot.setCatapultPower(0);
-//                }
-//                break;
-//            case LAUNCH:
-//                if (gamepad1.right_bumper && !sensor.getState()) {
-//                    robot.setCatapultPower(1);
-//                    states = States.DOWN;
-//                }
-//                break;
-//            case MANUAL:
-//                if (gamepad1.a) {
-//                    robot.setCatapultPower(1);
-//                } else if (gamepad1.b) {
-//                    robot.setCatapultPower(-1);
-//                }
-//                else {
-//                    robot.setCatapultPower(0);
-//                }
-//                break;
-//            default:
-//                states = States.START;
-//
-//        }
-        if (gamepad1.left_bumper && states != States.START) {
-            states = States.START;
+        if (gamepad1.dpad_up) {
+            robot.setNectarServoPosition(0.75);
+            robot.setPollenServoPosition(0);
         }
-        telemetry.addData("States", states);
-        telemetry.update();
+        else if (gamepad1.dpad_down) {
+            robot.setNectarServoPosition(0);
+            robot.setPollenServoPosition(1);
+        }
 
-
+//        telemetry.addData("States", states);
+//        telemetry.update();
 
     }
 }
